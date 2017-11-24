@@ -41,8 +41,8 @@
     "markdown"
   ],
   "scripts": {
-    "start": "node bin/nodeppt start -d ppts",
-    "build": "node bin/nodeppt generate"
+    "start": "node bin/nodeppt start -d ppts -w",
+    "build": "node bin/nodeppt generate ppts"
   },
   "readmeFilename": "README_EN.md",
   "license": "SEE LICENSE IN MIT-LICENSE.txt"
