@@ -42,7 +42,7 @@
   ],
   "scripts": {
     "start": "node bin/nodeppt start -d ppts -w",
-    "build": "node bin/nodeppt generate ppts"
+    "build": "rm -rf publish && node bin/nodeppt generate ppts && cp -r assets/* publish"
   },
   "readmeFilename": "README_EN.md",
   "license": "SEE LICENSE IN MIT-LICENSE.txt"
