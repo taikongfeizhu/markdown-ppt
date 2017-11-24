@@ -1,0 +1,30 @@
+.file-setting{
+    color: yellow;
+}
+#incallback,#outcallback{
+    margin-top:10px;
+    background-color: rgba(0,0,0,.5);
+}
+
+body{
+    background: #232323;
+}
+
+table{
+   border-collapse:collapse !important;
+   background: none !important;
+}
+
+table thead th,
+table tr,
+table tr td {
+    color: #ccc;
+    text-shadow: none !important;
+    border: 1px solid #ccc !important;
+    background: none !important;
+}
+
+pre code{
+    font-family: 'Droid Sans Mono';
+    font-size: 85%;
+}
