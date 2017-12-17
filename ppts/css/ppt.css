@@ -15,6 +15,16 @@ table{
    background: none !important;
 }
 
+ul{
+    list-style: none;
+    text-align: left;
+}
+
+ul li {
+    list-style: none;
+    text-align: left;
+}
+
 table thead th,
 table tr,
 table tr td {
