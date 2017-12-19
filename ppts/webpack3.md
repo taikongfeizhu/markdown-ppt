@@ -10,7 +10,7 @@ date: 2017年12月20日
 
 [slide]
 # Webpack3工程与实践
-## 黄健  商业产品-客增研发
+## 黄健  今日头条-客增研发
 
 [slide]
 # 第一部分：前端工程化简介
@@ -410,6 +410,35 @@ https://github.com/taikongfeizhu/webpack-dll-demo
   }
     </code></pre>
 </div>  
+
+[slide]
+## 利用happypack做多核编译资源
+-----
+<div class="columns1">
+<pre><code class="javascript">
+ const HappyPack = require('happypack');
+ const os = require('os')
+ const HappyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length}); // 启动线程池
+  module:{
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        // use: ['babel-loader?cacheDirectory'],
+        use: 'happypack/loader?id=jsx',
+        exclude: /^node_modules$/
+      }
+    ]
+  },
+  plugins:[
+    new HappyPack({
+     id: 'jsx',
+     threadPool: HappyThreadPool,
+     loaders: ['babel-loader']
+   })
+  ]
+</code></pre>
+</div>
+### [Happypack](https://github.com/amireh/happypack)
     
 [slide]
 ## 利用dllPlugin做资源预编译
@@ -472,7 +501,7 @@ https://github.com/taikongfeizhu/webpack-dll-demo
 </div>
 
 [slide]
-## code split
+## 代码分割（code spliting）
 -----
 <div class="columns1">
 <pre><code class="javascript">
@@ -585,26 +614,30 @@ T> `+++` super fast, `++` fast, `+` pretty fast, `o` medium, `-` pretty slow, `-
 -----
 <div class="columns1">
 <pre><code class="javascript">
-  const UglifyJsParallelPlugin = require('webpack-uglify-parallel')
-  const os = require('os')
-  
-  new UglifyJsParallelPlugin({
-    workers: os.cpus().length,
-    mangle: true,
+  - new webpack.optimize.UglifyJsPlugin()
+  + const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+  new UglifyJsPlugin({
+    uglifyOptions: {
+      ie8: false,
+      ecma: 8,
+      mangle: true,
+      output: { comments: false },
+      compress: { warnings: false }
+    },
     sourceMap: false,
-    compressor: {
-      warnings: false,
-      drop_debugger: true,
-      dead_code: true
-    }
-  }),
+    cache: true,
+    parallel: os.cpus().length * 2
+  })
 </code></pre>
+</div>
+### [uglifyjs-webpack-plugin](https://webpack.js.org/plugins/uglifyjs-webpack-plugin/)
 
 [slide]
 ## <strong>优化小结</strong>
 ----
 * 对依赖模块的构成进行充分析 {:&.rollIn}
 * 合理使用externals减少bundle体积
+* 利用happypack做多核编译资源
 * 利用dllPlugin做资源预编译
 * 利用tree-shaking减少无用文件
 * 对bundle进行code split
