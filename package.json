@@ -41,7 +41,7 @@
     "markdown"
   ],
   "scripts": {
-    "start": "node bin/nodeppt start -d ppts -w",
+    "start": "node bin/nodeppt start -p 9567 -d ppts -w",
     "build": "rm -rf publish && node bin/nodeppt generate ppts && cp -r assets/* publish"
   },
   "readmeFilename": "README_EN.md",

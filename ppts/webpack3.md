@@ -377,7 +377,7 @@ https://github.com/taikongfeizhu/webpack-dll-demo
 ## 依赖模块分析(Dependency Graph)
 -----
 <div class="columns1">
-    <img src="/img/dependency.png" height="460">
+    <img src="/img/bundle-analyzer.jpg" height="460">
 </div>
 
 ### [webpack-bundle-analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer)
