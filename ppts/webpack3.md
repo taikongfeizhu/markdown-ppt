@@ -1,16 +1,15 @@
 title: webpack3工程化与实践
-speaker: 黄健
+speaker: Abcat
 url: 可以设置链接
 theme: dark
 headFiles: /css/ppt.css
 transition: moveIn
 highlightStyle: railscasts
-usemathjax: yes
 date: 2017年12月20日
 
 [slide]
-# webpack3工程化与实践
-## 黄健  今日头条-客增研发
+# Webpack3工程化与实践
+## <strong>黄健 今日头条-客增研发</strong>
 
 [slide]
 # 第一部分：前端工程化简介
@@ -94,22 +93,22 @@ date: 2017年12月20日
 [slide]
 
 # Webpack应该怎么学？ {:&.flexbox.vleft}
-> "二八原则"：熟练掌握最核心的API，多查阅，多思考，多总结，不做代码搬运工
+> "二八原则"：熟练掌握最核心的API，多查阅，多思考，多总结，不做代码搬运工 !
 
 [slide]
 ##  webpack中最核心的几个概念(Core Concepts) 
 ---
 <pre><code class="markdown">/* Core Concepts  */
 
-entry: 打包文件的入口点，支持字符串(单文件)，数组(多文件)和对象(多入口)
-chunk：被entry所依赖的额外的代码块，同样可以包含一个或者多个文件，所有的资源都以模块的形式存在
-output: 指定构建好的资源文件如何写入到指定目录，只能有一个出口 (path，publicPath，filenname)
-loaders: 加载器，用于对特定的源代码和模块进行转换，支持各种语言和预处理器编写模块(jsx=>js, less=>css, img=>base64等)
-plugins: 插件，服务于编译期间，是一个具有apply属性的JavaScript对象，其apply属性会被webpack compiler调用，并且compiler对象可在整个编译生命周期访问
-modules: webpack中放置loaders的地方，可集中在rules数组中进行管理
-resolve：设置对资源的寻址和解析规则，可通过alias和extensions来进行解析规则定制
-externals：从输出的 bundle 中排除依赖，多在 library 开发或者加载中使用
-manifest：文件清单,当编译器(compiler)开始执行、解析和映射应用程序时，它会保留所有模块的详细要点,使用 manifest 中的数据，runtime 将能够查询模块标识符，检索出背后对应的模块。
+<strong>entry:</strong> 就是告诉webpack从哪里开始并通过依赖关系图得知要哪些文件要打包
+<strong>output</strong>: 指定构建好的资源文件如何写入到指定目录，只能有一个出口 (path，publicPath，filenname)
+<strong>loaders</strong>: 加载器，加载器用于将资源代码转换成模块。它允许您在导入或“加载”它们时预处理文件，支持各种语言和预处理器编写模块(jsx=>js, less=>css, img=>base64等)
+<strong>plugins</strong>: 插件，服务于编译期间，是一个具有apply属性的JavaScript对象，其apply属性会被webpack compiler调用，并且compiler对象可在整个编译生命周期访问
+<strong>chunk</strong> ：被entry所依赖的额外的代码块，同样可以包含一个或者多个文件，所有的资源都以模块的形式存在
+<span class='green'>modules</span>: webpack中放置loaders的地方，可集中在rules数组中进行管理
+<span class='green'>resolve</span>：设置对资源的寻址和解析规则，可通过alias和extensions来进行解析规则定制
+<span class='green'>externals</span>：从输出的 bundle 中排除依赖，多在 library 开发或者加载中使用
+<span class='green'>manifest</span>：文件清单,当编译器(compiler)开始执行、解析和映射应用程序时，它会保留所有模块的详细要点,使用 manifest 中的数据，runtime 将能够查询模块标识符，检索出背后对应的模块。
 </code>
 </pre>
 ### https://webpack.js.org/concepts/
@@ -377,7 +376,7 @@ https://github.com/taikongfeizhu/webpack-dll-demo
 ## 依赖模块分析(Dependency Graph)
 -----
 <div class="columns1">
-    <img src="/img/bundle-analyzer.jpg" height="460">
+    <img src="/img/bundle-analyzer.jpg" height="480">
 </div>
 
 ### [webpack-bundle-analyzer](https://www.npmjs.com/package/webpack-bundle-analyzer)
@@ -472,11 +471,11 @@ https://github.com/taikongfeizhu/webpack-dll-demo
 </div>
     
 [slide]
-## tree-shaking & babel-import-plugin
+## Tree-shaking & Scope Hoisting
 -----
 <div class="columns1">
 <pre><code class="javascript">
-  // 通过配置减少没有引用到的方法
+  // .babelrc: 通过配置减少没有引用到的方法
   {
     "presets": [
       ["env", {
@@ -487,7 +486,6 @@ https://github.com/taikongfeizhu/webpack-dll-demo
       ["es2015", {"modules": false}]  // tree-shaking
     ],
     "plugins": [
-      ...
       [
         "import",
         {
@@ -495,6 +493,14 @@ https://github.com/taikongfeizhu/webpack-dll-demo
           "libraryName": "antd"  // babel-import-plugin
         }
       ]
+    ]
+  }
+  
+  // webpack.config: Scope Hoisting
+  {
+    plugins:[
+      // https://zhuanlan.zhihu.com/p/27980441
+      new webpack.optimize.ModuleConcatenationPlugin()
     ]
   }
 </code></pre>
@@ -635,15 +641,15 @@ T> `+++` super fast, `++` fast, `+` pretty fast, `o` medium, `-` pretty slow, `-
 [slide]
 ## <strong>优化小结</strong>
 ----
-* 对依赖模块的构成进行充分析 {:&.rollIn}
-* 合理使用externals减少bundle体积
-* 利用happypack做多核编译资源
-* 利用dllPlugin做资源预编译
-* 利用tree-shaking减少无用文件
-* 对bundle进行code split
-* 合理使用dev-tool
-* 使用HMR提升开发调试效率
-* 利用CPU多核进行压缩
+* 1.对依赖模块的构成进行充分析 {:&.rollIn}
+* 2.合理使用externals减少bundle体积
+* 3.利用happypack做多核编译资源
+* 4.利用dllPlugin做资源预编译
+* 5.利用tree-shaking和Scope Hoisting减小文件
+* 6.对bundle进行code split
+* 7.合理使用dev-tool
+* 8.使用HMR提升开发调试效率
+* 9.利用CPU多核进行压缩
 
 [slide]
 # 高阶玩法
